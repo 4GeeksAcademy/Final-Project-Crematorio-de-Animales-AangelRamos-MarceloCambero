@@ -1,19 +1,29 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { isAuthenticated, logout } from "../utils/auth";
 
 export const Navbar = () => {
+    const navigate = useNavigate();
 
-	return (
-		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
-				</div>
-			</div>
-		</nav>
-	);
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
+
+    return (
+        <nav style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
+            <Link to="/" className="me-3">Home</Link>
+            {!isAuthenticated() ? (
+                <>
+                    <Link to="/login" className="me-3">Login</Link>
+                    <Link to="/signup">Signup</Link>
+                </>
+            ) : (
+                <>
+                    <Link to="/private" className="me-3">Zona Privada</Link>
+                    <button onClick={handleLogout} className="btn btn-outline-danger btn-sm">Cerrar sesión</button>
+                </>
+            )}
+        </nav>
+    );
 };
